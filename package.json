@@ -1,0 +1,19 @@
+{
+  "name": "birdcage2-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tweet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbandi/birdcage2-worker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbandi/birdcage2-worker/issues"
+  },
+  "homepage": "https://github.com/jbandi/birdcage2-worker"
+}
