@@ -1,2 +1,2 @@
-#! /app/bin/node
+#! /app/.heroku/node/bin/node
 console.log("About to tweet...")
