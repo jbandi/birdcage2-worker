@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/jbandi/birdcage2-worker/issues"
   },
-  "homepage": "https://github.com/jbandi/birdcage2-worker"
+  "homepage": "https://github.com/jbandi/birdcage2-worker",
+  "dependencies": {
+    "colors": "^1.1.0",
+    "oauth": "^0.9.13",
+    "optimist": "^0.6.1",
+    "step": "0.0.5",
+    "twit": "^1.1.20"
+  }
 }
