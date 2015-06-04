@@ -1,6 +1,6 @@
 #! /app/.heroku/node/bin/node
 'use strict';
-console.log('About to tweet...'')
+console.log('About to tweet...')
 
 let birdcage = require('./birdcage');
 
