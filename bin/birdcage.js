@@ -39,7 +39,7 @@ module.exports = function (configuration) {
                     });
 
                     T.post('statuses/update', {status: tweet.content + new Date()}, function (err, data, response) {
-                        console.log(util.inspect(response));
+                        console.log(util.inspect(response.statusCode));
                     })
                 }
             }
