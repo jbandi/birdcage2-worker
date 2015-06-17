@@ -1,7 +1,23 @@
 #! /app/.heroku/node/bin/node
 'use strict';
-console.log('About to tweet...')
+console.log('About to tweet...');
+var fs = require('fs');
 
-let birdcage = require('./birdcage');
+var configuration;
+try {
+    configuration = JSON.parse(fs.readFileSync('environment.json'));
+    console.log("Environment read from file");
+} catch(err) {
+    configuration = {
+        twitter_consumer_key: process.env.TWITTER_CONSUMER_KEY,
+        twitter_consumer_secret: process.env.TWITTER_CONSUMER_SECRET
+    };
+    console.log("Environment read from environment");
+}
 
-birdcage.post('hello world! ' + new Date());
+
+
+
+let birdcage = require('./birdcage')(configuration);
+
+birdcage.post();

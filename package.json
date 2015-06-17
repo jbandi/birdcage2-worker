@@ -18,12 +18,15 @@
   "homepage": "https://github.com/jbandi/birdcage2-worker",
   "dependencies": {
     "colors": "^1.1.0",
+    "firebase": "^2.2.6",
+    "https": "^1.0.0",
     "oauth": "^0.9.13",
     "optimist": "^0.6.1",
+    "request": "^2.57.0",
     "step": "0.0.5",
     "twit": "^1.1.20"
   },
   "engines": {
-  "iojs": "2.2.1"
-}
+    "iojs": "2.2.1"
+  }
 }

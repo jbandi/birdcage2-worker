@@ -1,2 +1,6 @@
 secret_env
+environment.json
 node_modules/
+
+
+.idea
