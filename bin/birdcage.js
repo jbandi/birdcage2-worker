@@ -55,7 +55,7 @@ module.exports = function (configuration) {
                     var req = https.request({
                             hostname: 'scorching-inferno-3523.firebaseio.com',
                             method: "PATCH",
-                            path: '/posts/test_jb/' + tweetId + `/.json?${REST_AUTH}`
+                            path: `/posts/${user.id}/${tweetId}/.json?${REST_AUTH}`
                         }, function (res) {
                             console.log("Firebase update response: " + util.inspect(res.statusCode));
                         }
