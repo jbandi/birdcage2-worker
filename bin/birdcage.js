@@ -17,7 +17,7 @@ module.exports = function (configuration) {
 
     function post() {
         request(URL_GET_USERS, function (error, response, body) {
-            console.log("Get users response: " + response.statusCode);
+            console.log("Get users response : " + response.statusCode);
             let users = JSON.parse(body);
             for (let userId in users) {
                 let user = users[userId];
