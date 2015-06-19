@@ -4,9 +4,8 @@ module.exports = function (configuration) {
     let request = require('request'),
         Twit = require('twit'),
         util = require('util'),
-        https = require("https");
-
-    let perform_loop = true;
+        https = require("https"),
+        moment = require('moment');
 
     const FIREBASE_BASE = 'https://scorching-inferno-3523.firebaseio.com';
     const REST_AUTH = `auth=${configuration.firebase_secret}`;
@@ -21,20 +20,35 @@ module.exports = function (configuration) {
             console.log("Get users response: " + response.statusCode);
             let users = JSON.parse(body);
             for (let userId in users) {
-                console.log("Checking tweets for user: " + userId);
-                var user = users[userId];
-                user.id = userId;
-                tweetForUser(user);
+                let user = users[userId];
+                let next_tweet = moment(user.last_post).utc().add(user.post_interval || 60, 'minutes');
+                console.log(`User post interval: ${user.post_interval}`);
+                console.log(`Last post: ${moment(user.last_post).utc().format()}`);
+                console.log(`Next tweet: ${next_tweet.format()}`);
+                console.log(`Current time: ${moment().utc().format()}`);
+                if (!user.active) {
+                    console.log(`User ${userId} is not active.`);
+                }
+                else if (next_tweet.isAfter(moment().utc())) {
+                    console.log(`User ${userId} is not ready to tweet. Next tweet ${next_tweet.fromNow()} `);
+                }
+                else {
+                    console.log(`Checking tweets for user:  ${userId}`);
+                    user.id = userId;
+                    tweetForUser(user);
+
+                }
             }
+
         })
     }
 
     function tweetForUser(user) {
-        console.log(util.inspect(user));
-        request(`${FIREBASE_BASE}/posts/` + user.id + '/.json?${REST_AUTH}&orderBy="$priority"&startAt=1&limitToFirst=1', function (error, response, body) {
+        //console.log(util.inspect(user));
+        request(`${FIREBASE_BASE}/posts/` + user.id + '/.json?${REST_AUTH}&orderBy="$priority"&startAt=2&limitToFirst=1', function (error, response, body) {
             console.log("Get latest tweet response: " + response.statusCode);
             if (!error && response.statusCode == 200) {
-                console.log("Got tweets: " + body);
+                console.log(`Got tweets for user ${user.id}: ${body}`);
                 let tweets = JSON.parse(body);
 
                 for (var tweetId in tweets) {
@@ -52,19 +66,32 @@ module.exports = function (configuration) {
                         console.log('Twitter post response: ' + util.inspect(response.statusCode));
                     });
 
+                    // update post
                     var req = https.request({
                             hostname: 'scorching-inferno-3523.firebaseio.com',
                             method: "PATCH",
                             path: `/posts/${user.id}/${tweetId}/.json?${REST_AUTH}`
                         }, function (res) {
-                            console.log("Firebase update response: " + util.inspect(res.statusCode));
+                            console.log("Firebase post update response: " + util.inspect(res.statusCode));
                         }
-
                     );
                     req.end(JSON.stringify({
-                        ".priority": perform_loop ? Date.now() : 1,
+                        ".priority": user.reshedule ? Date.now() : 1,
                         last_sent: new Date(),
                         sent_count: tweet.sent_count !== undefined ? ++tweet.sent_count : 0
+                    }));
+
+                    // update user
+                    var req = https.request({
+                            hostname: 'scorching-inferno-3523.firebaseio.com',
+                            method: "PUT",
+                            path: `/users/${user.id}/last_post.json?${REST_AUTH}`
+                        }, function (res) {
+                            console.log("Firebase user update response: " + util.inspect(res.statusCode));
+                        }
+                    );
+                    req.end(JSON.stringify({
+                        ".sv": "timestamp"
                     }));
                 }
             }
