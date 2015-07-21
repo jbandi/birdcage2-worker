@@ -1,0 +1,17 @@
+{
+    "rules": {
+      "posts":{
+        "$uid":{
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid",
+          "$post":{
+            ".indexOn": "last_sent"
+          }
+        }
+      },
+      "users":{
+        ".read": false,
+        ".write": false
+      }
+    }
+}
