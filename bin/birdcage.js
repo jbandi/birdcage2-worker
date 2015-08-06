@@ -21,9 +21,10 @@ module.exports = function (configuration) {
             let users = JSON.parse(body);
             for (let userId in users) {
                 let user = users[userId];
-                let next_tweet = moment(user.last_post).utc().add(user.post_interval || 60, 'minutes');
+                let last_post = user.last_post || new Date(0);
+                let next_tweet = moment(last_post).utc().add(user.post_interval || 60, 'minutes');
                 console.log(`User post interval: ${user.post_interval}`);
-                console.log(`Last post: ${moment(user.last_post).utc().format()}`);
+                console.log(`Last post: ${moment(last_post).utc().format()}`);
                 console.log(`Next tweet: ${next_tweet.format()}`);
                 console.log(`Current time: ${moment().utc().format()}`);
                 if (!user.active) {
@@ -33,8 +34,8 @@ module.exports = function (configuration) {
                     console.log(`User ${userId} is not ready to tweet. Next tweet ${next_tweet.fromNow()} `);
                 }
                 else {
-                    console.log(`Checking tweets for user:  ${userId} / ${user.uid}`);
-                    user.id = userId;
+                    console.log(`Checking tweets for user:  ${userId} / ${user.username}`);
+                    user.uid = userId;
                     tweetForUser(user);
 
                 }
@@ -48,7 +49,7 @@ module.exports = function (configuration) {
         request(`${FIREBASE_BASE}/posts/${user.uid}/.json?${REST_AUTH}&orderBy="$priority"&startAt=2&limitToFirst=1`, function (error, response, body) {
             console.log("Get latest tweet response: " + response.statusCode);
             if (!error && response.statusCode == 200) {
-                console.log(`Got tweets for user ${user.id}: ${body}`);
+                console.log(`Got tweets for user ${user.uid}: ${body}`);
                 let tweets = JSON.parse(body);
 
                 for (var tweetId in tweets) {
