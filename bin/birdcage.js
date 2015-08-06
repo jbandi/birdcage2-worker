@@ -20,6 +20,8 @@ module.exports = function (configuration) {
             console.log("Get users response : " + response.statusCode);
             let users = JSON.parse(body);
             for (let userId in users) {
+                console.log(`Processing user: ${userId}`);
+                
                 let user = users[userId];
                 let last_post = user.last_post || new Date(0);
                 let next_tweet = moment(last_post).utc().add(user.post_interval || 60, 'minutes');
