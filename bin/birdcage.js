@@ -88,7 +88,7 @@ module.exports = function (configuration) {
                     var req = https.request({
                             hostname: 'scorching-inferno-3523.firebaseio.com',
                             method: "PUT",
-                            path: `/users/${user.id}/last_post.json?${REST_AUTH}`
+                            path: `/users/${user.uid}/last_post.json?${REST_AUTH}`
                         }, function (res) {
                             console.log("Firebase user update response: " + util.inspect(res.statusCode));
                         }
