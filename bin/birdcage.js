@@ -65,7 +65,7 @@ module.exports = function (configuration) {
                         , access_token_secret: user.access_token_secret
                     });
 
-                    T.post('statuses/update', {status: tweet.content + new Date()}, function (err, data, response) {
+                    T.post('statuses/update', {status: tweet.content}, function (err, data, response) {
                         console.log('Twitter post response: ' + util.inspect(response.statusCode));
                     });
 
